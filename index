@@ -318,7 +318,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // URL ของ Google Apps Script Web App Endpoint
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWqN-GVqSsg9nNqghqz06LCy5AUW08BwEUO7rAyC64-Twtm02gizmSR2KuxIO0n_0E/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzqa7bqHJ4VUedPK3zPHq1oBh58y-wx0EC5bHrO5jrqD7ZIzpQW73m9oAum9IMQSHAA/exec';
 
     let myModal = new bootstrap.Modal(document.getElementById('dataModal'));
     let mySettingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
