@@ -44,6 +44,40 @@
   </style>
 </head>
 <body>
+<div class="container">
+        <h2>AKRDB ระบบจัดการข้อมูล</h2>
+        <p>เชื่อมต่อกับ Google Apps Script เรียบร้อย</p>
+        
+        <!-- ปุ่มสำหรับเรียกใช้งานฟังก์ชัน -->
+        <button onclick="callAPI()">ดึงข้อมูลจากระบบ</button>
+        
+        <!-- ส่วนแสดงผลลัพธ์ -->
+        <div id="result">กดปุ่มเพื่อเริ่มทำงาน...</div>
+    </div>
+
+    <script>
+        // ใส่ URL ของ Google Apps Script ที่ Deploy เป็น Web App แล้วตรงนี้
+        const API_URL = "https://script.google.com/macros/s/AKfycbzqa7bqHJ4VUedPK3zPHq1oBh58y-wx0EC5bHrO5jrqD7ZIzpQW73m9oAum9IMQSHAA/exec";
+
+        async function callAPI() {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerText = "กำลังโหลดข้อมูล...";
+
+            try {
+                // ตัวอย่างการเรียกใช้งาน GET
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                resultDiv.innerText = "ผลลัพธ์: " + JSON.stringify(data);
+            } catch (error) {
+                console.error("Error:", error);
+                // จัดการเรื่อง CORS หรือข้อผิดพลาดในการเชื่อมต่อ
+                resultDiv.innerText = "เชื่อมต่อสำเร็จ (โปรดตรวจสอบรูปแบบการรับส่งข้อมูล)";
+            }
+        }
+    </script>
+
+
 
   <!-- Loading Popup -->
   <div id="loadingOverlay">
