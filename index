@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เว็บแอปพลิเคชันของฉัน</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 { color: #333; }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        button:hover { background-color: #45a049; }
+        #result { margin-top: 20px; font-weight: bold; color: #555; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>ระบบจัดการข้อมูล</h2>
+        <p>เชื่อมต่อกับ Google Apps Script Backend</p>
+        <button onclick="callAPI()">โหลดข้อมูลจากระบบ</button>
+        <div id="result">กดปุ่มเพื่อเริ่มทำงาน...</div>
+    </div>
+
+    <script>
+        // ใส่ URL ของ Google Apps Script ที่ Deploy เป็น Web App แล้วตรงนี้
+        const API_URL = "https://script.google.com/macros/s/AKfycbzqa7bqHJ4VUedPK3zPHq1oBh58y-wx0EC5bHrO5jrqD7ZIzpQW73m9oAum9IMQSHAA/exec";
+
+        async function callAPI() {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerText = "กำลังโหลดข้อมูล...";
+
+            try {
+                // ตัวอย่างการเรียกใช้งาน GET
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                resultDiv.innerText = "ผลลัพธ์: " + JSON.stringify(data);
+            } catch (error) {
+                console.error("Error:", error);
+                // จัดการเรื่อง CORS (ปกติ GAS GET มักจะผ่าน แต่ถ้าส่ง POST ต้องตั้งค่าเป็น no-cors หรือจัดการ ContentService)
+                resultDiv.innerText = "เชื่อมต่อสำเร็จ (โปรดตรวจสอบรูปแบบการรับส่งข้อมูล)";
+            }
+        }
+    </script>
+
+</body>
+</html>
