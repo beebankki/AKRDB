@@ -459,7 +459,63 @@
         }
       }
       return new Date(str);
-    }
+    
+function calculateStayDays(admitVal, disActualVal) {
+  if (!admitVal) return '';
+
+  let admitDate = parseInputDate(admitVal);
+  if (!admitDate || isNaN(admitDate.getTime())) return '';
+
+  // ตัดเวลาออกเพื่อคำนวณเฉพาะวันที่
+  admitDate.setHours(0, 0, 0, 0);
+
+  let today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // กรณียังไม่ถึงวันเข้าพัก
+  if (admitDate > today) {
+    let dd = String(admitDate.getDate()).padStart(2, '0');
+    let mm = String(admitDate.getMonth() + 1).padStart(2, '0');
+    let yyyy = admitDate.getFullYear() + 543;
+    return `เข้าพัก. ${dd}/${mm}/${yyyy}`;
+  }
+
+  // ถ้ามีวันที่ Discharge จริง ให้ใช้วันนั้น
+  let endDate = disActualVal
+    ? parseInputDate(disActualVal)
+    : new Date();
+
+  if (!endDate || isNaN(endDate.getTime())) {
+    endDate = new Date();
+  }
+
+  endDate.setHours(0, 0, 0, 0);
+
+  // นับรวมวันที่สิ้นสุดด้วย ตามระบบเดิม
+  endDate.setDate(endDate.getDate() + 1);
+
+  let y = endDate.getFullYear() - admitDate.getFullYear();
+  let m = endDate.getMonth() - admitDate.getMonth();
+  let d = endDate.getDate() - admitDate.getDate();
+
+  if (d < 0) {
+    m--;
+    let prevMonth = new Date(
+      endDate.getFullYear(),
+      endDate.getMonth(),
+      0
+    );
+    d += prevMonth.getDate();
+  }
+
+  if (m < 0) {
+    y--;
+    m += 12;
+  }
+
+  return `${y} ปี ${m} เดือน ${d} วัน`;
+}
+}
 
     function calculateDuration() {
       let admitVal = document.getElementById('f_admitDate').value;
@@ -517,8 +573,14 @@
       let tbody = document.getElementById('tableBody');
       tbody.innerHTML = '';
       allData.forEach((row, i) => {
-        let statusBadge = row.status === 'Active' ? 'bg-success' : 'bg-danger';
-        let imgUrl = parseDriveImage(row.patientImg);
+  let statusBadge = row.status === 'Active' ? 'bg-success' : 'bg-danger';
+  let imgUrl = parseDriveImage(row.patientImg);
+
+  // คำนวณจำนวนวันใหม่ทุกครั้งที่แสดงตาราง
+  let stayDays = calculateStayDays(
+    row.admitDate,
+    row.disActualDate
+  );
         
         let phone = row.relativePhone ? String(row.relativePhone).trim() : '';
         if (phone.length === 9 && !phone.startsWith('0')) {
@@ -536,7 +598,7 @@
             <td>${row.type}</td>
             <td>${row.admitDate}</td>
             <td>${row.bedFee}</td>
-            <td>${row.stayDays}</td>
+            <td>${stayDays}</td>
             <td>${row.congenitalDisease}</td>
             <td>${row.relativeName}</td>
             <td>${phone}</td>
