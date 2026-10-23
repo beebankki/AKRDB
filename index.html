@@ -461,57 +461,7 @@
       return new Date(str);
     }
 
-    function calculateDuration() {
-      let admitVal = document.getElementById('f_admitDate').value;
-      let disActualVal = document.getElementById('f_disActualDate').value;
-      let stayDaysElem = document.getElementById('f_stayDays');
-
-      if (!admitVal) {
-        stayDaysElem.value = '';
-        return;
-      }
-
-      let admitDate = parseInputDate(admitVal);
-      if (!admitDate || isNaN(admitDate.getTime())) {
-        stayDaysElem.value = '';
-        return;
-      }
-
-      let today = new Date();
-      today.setHours(0,0,0,0);
-
-      let admitCheck = new Date(admitDate);
-      admitCheck.setHours(0,0,0,0);
-
-      if (admitCheck > today) {
-        let dd = String(admitDate.getDate()).padStart(2, '0');
-        let mm = String(admitDate.getMonth() + 1).padStart(2, '0');
-        let yyyy = admitDate.getFullYear() + 543;
-        stayDaysElem.value = `เข้าพัก. ${dd}/${mm}/${yyyy}`;
-      } else {
-        let endDate = disActualVal ? parseInputDate(disActualVal) : new Date();
-        if (!endDate || isNaN(endDate.getTime())) endDate = new Date();
-        
-        endDate.setHours(0,0,0,0);
-        endDate.setDate(endDate.getDate() + 1);
-
-        let y = endDate.getFullYear() - admitDate.getFullYear();
-        let m = endDate.getMonth() - admitDate.getMonth();
-        let d = endDate.getDate() - admitDate.getDate();
-
-        if (d < 0) {
-          m--;
-          let prevMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
-          d += prevMonth.getDate();
-        }
-        if (m < 0) {
-          y--;
-          m += 12;
-        }
-
-        stayDaysElem.value = `${y} ปี ${m} เดือน ${d} วัน`;
-      }
-    }
+    
 
     function renderTable() {
       let tbody = document.getElementById('tableBody');
@@ -593,7 +543,7 @@
       
       document.getElementById('f_admitDate').value = data.admitDate || '';
       document.getElementById('f_bedFee').value = data.bedFee;
-   
+  
       document.getElementById('f_congenitalDisease').value = data.congenitalDisease;
       
       document.getElementById('f_disNotifiedDate').value = data.disNotifiedDate || '';
